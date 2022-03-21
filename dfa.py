@@ -287,9 +287,11 @@ delta:\n{self._delta2table()}
 
 
 if __name__ == '__main__':
-  nfaPath = '/home/ubuntu/Code/pad/dfa/input/54a.json'
-  if len(sys.argv) > 1:
-    nfaPath = sys.argv[1]
+
+  if len(sys.argv) != 2:
+    print('Usage: python dfa.py <path-to-nfa-spec>')
+
+  nfaPath = sys.argv[1]
   if not os.path.isfile(nfaPath):
     err(f'Could not find the file "{nfaPath}"')
 
