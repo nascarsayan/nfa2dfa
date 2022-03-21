@@ -2,9 +2,10 @@ from collections import defaultdict, deque
 import json
 import os
 import sys
-from typing import Deque, Dict, List, Set, Tuple
+from typing import Dict, List, Set, Tuple
 from prettytable import PrettyTable
 from copy import deepcopy
+from itertools import product
 
 LAMBDA = 'lambda'
 DELTA = 'delta'
@@ -12,6 +13,13 @@ DELTA = 'delta'
 
 def err(message: str):
   raise Exception(message)
+
+
+def printTriangle(triangle: list[list[int]]):
+  print(
+    '\n'.join([' '.join([str(tij) for tij in ti])
+    for ti in triangle]) + '\n-------'
+    )
 
 
 class DFARev:
@@ -29,9 +37,27 @@ class DFARev:
   def getNextPairs(self, pair: Tuple[int, int], ch: str):
     qi_next = set(filter(lambda x: x != -1, self.delta[pair[0]][ch]))
     qj_next = set(filter(lambda x: x != -1, self.delta[pair[1]][ch]))
-    pairs = set(tuple(sorted(pi)) for pi in set(zip(qi_next, qj_next)))
+    pairs = set(tuple(sorted(pi)) for pi in set(product(qi_next, qj_next)))
     pairs = set(filter(lambda x: x[0] != x[1], pairs))
     return pairs
+
+  def delta2table(self):
+    q = list(sorted(self.q))
+    Sigma = list(sorted(self.Sigma))
+    table = PrettyTable()
+    table.field_names = [DELTA] + Sigma
+    for qi in q:
+      if qi not in self.delta:
+        table.add_row([str(qi)] + [" "] * len(Sigma))  # type: ignore
+        continue
+      row = [str(qi)]
+      for ch in Sigma:
+        if ch not in self.delta[qi]:
+          row.append(" ")
+          continue
+        row.append(str(self.delta[qi][ch]))
+      table.add_row(row)  # type: ignore
+    return table
 
 
 class DFA:
@@ -52,6 +78,7 @@ class DFA:
     for qi in q:
       if qi not in self.delta:
         table.add_row([qi] + [" "] * len(Sigma))  # type: ignore
+        continue
       row = [qi]
       for ch in Sigma:
         if ch not in self.delta[qi]:
@@ -86,34 +113,47 @@ delta:\n{self._delta2table()}
         qj = self.delta[qi][ch]
         delta[name2q[qj]][ch].add(name2q[qi])
 
-    rev = DFARev(q2Name, set(range(len(qNames))), self.Sigma, delta)
-    triangle = [[0] * len(qNames) for _ in qNames]
-    queue: Deque[Tuple[int, int, int]] = deque()
+    triangle = [[0] * i for i in range(len(qNames))]
     for i in range(len(qNames)):
       for j in range(i + 1, len(qNames)):
         if not ((qNames[i] in self.F) == (qNames[j] in self.F)):
-          queue.append((i, j, 1))
           triangle[j][i] = 1
+          continue
 
-    while queue:
-      (i, j, dist) = queue.popleft()
-      for ch in self.Sigma:
-        nextPairs = rev.getNextPairs((i, j), ch)
-        for (i_prev, j_prev) in nextPairs:
-          if triangle[j_prev][i_prev] > 0:
+    print(
+      '+++ Map of state number to state name serving as the legend in triangle:\n\n'
+      )
+    print('\n'.join([f'{k} | {q2Name[k]}' for k in q2Name.keys()]))
+    print(
+      '\n\n+++ Marked all pairs of states where one is a final state, while the other is not'
+      )
+    printTriangle(triangle)
+    while True:
+      work = False
+      curr = deepcopy(triangle)
+      for i in range(len(qNames)):
+        for j in range(i + 1, len(qNames)):
+          if curr[j][i] > 0:
             continue
-          queue.append((i_prev, j_prev, dist + 1))
-          triangle[j_prev][i_prev] = dist + 1
-        # print(
-        #   '\n'.join([' '.join([str(tij) for tij in ti])
-        #   for ti in triangle]) + '\n-------'
-        #   )
-
-    print('\n'.join([' '.join([str(tij) for tij in ti]) for ti in triangle]))
+          for ch in self.Sigma:
+            i_next = name2q[self.delta[q2Name[i]][ch]]
+            j_next = name2q[self.delta[q2Name[j]][ch]]
+            if i_next == -1 or j_next == -1 or i_next == j_next:
+              continue
+            i_next, j_next = list(sorted([i_next, j_next]))
+            if curr[j_next][i_next] == 0:
+              continue
+            triangle[j][i] = curr[j_next][i_next] + 1
+            work = True
+            break
+      if not work:
+        break
+    print('\n\n+++ Triangle filled')
+    printTriangle(triangle)
 
     collapsed: Set[int] = set()
-    for i in range(len(rev.q)):
-      for j in range(i + 1, len(rev.q)):
+    for i in range(len(qNames)):
+      for j in range(i + 1, len(qNames)):
         if triangle[j][i] == 0:
           collapsed = collapsed.union([i, j])
 
@@ -123,7 +163,7 @@ delta:\n{self._delta2table()}
 
     mergedState = list(sorted(collapsed))[0]
     discarded = collapsed.difference([mergedState])
-    qMinIdcs = list(sorted(rev.q.difference(discarded)))
+    qMinIdcs = list(sorted(set(range(len(qNames))).difference(discarded)))
     minimized.q = set([qNames[i] for i in qMinIdcs])
     for i in discarded:
       minimized.delta.pop(qNames[i])
@@ -137,78 +177,6 @@ delta:\n{self._delta2table()}
     for f in minimized.F:
       if name2q[f] in discarded:
         F.add(qNames[mergedState])
-      else:
-        F.add(f)
-    minimized.F = F  # type: ignore
-    return minimized
-
-  def minimizeBak(self):
-    rev = deepcopy(self)
-    delta: defaultdict[str, defaultdict[str,
-      str]] = defaultdict(lambda: defaultdict(str))
-    for qi in self.delta:
-      for ch in self.delta[qi]:
-        qj = self.delta[qi][ch]
-        delta[qj][ch] = qi
-    rev.delta = delta
-
-    q = list(sorted(rev.q))
-    q2idx: defaultdict[str, int] = defaultdict(lambda: -1)
-    for idx in range(len(q)):
-      q2idx[q[idx]] = idx
-    triangle = [[0] * len(q) for _ in q]
-    queue: Deque[Tuple[int, int, int]] = deque()
-    for i in range(len(q)):
-      for j in range(i + 1, len(q)):
-        if not ((q[i] in self.F) == (q[j] in self.F)):
-          queue.append((i, j, 1))
-          triangle[j][i] = 1
-
-    while queue:
-      (i, j, dist) = queue.popleft()
-      for ch in self.Sigma:
-        i_prev = q2idx[rev.delta[q[i]][ch]]
-        j_prev = q2idx[rev.delta[q[j]][ch]]
-        if (i_prev < 0) or (j_prev < 0) or (i_prev == j_prev):
-          continue
-        i_prev, j_prev = list(sorted([i_prev, j_prev]))
-        if triangle[j_prev][i_prev] > 0:
-          continue
-        queue.append((i_prev, j_prev, dist + 1))
-        triangle[j_prev][i_prev] = dist + 1
-      # print(
-      #   '\n'.join([' '.join([str(tij) for tij in ti])
-      #   for ti in triangle]) + '\n-------'
-      #   )
-
-    print('\n'.join([' '.join([str(tij) for tij in ti]) for ti in triangle]))
-
-    collapsed: Set[int] = set()
-    for i in range(len(q)):
-      for j in range(i + 1, len(q)):
-        if triangle[j][i] == 0:
-          collapsed = collapsed.union([i, j])
-
-    minimized = deepcopy(self)
-    if len(collapsed) == 0:
-      return minimized
-
-    mergedState = list(sorted(collapsed))[0]
-    discarded = collapsed.difference([mergedState])
-    qMinIdcs = list(sorted(set(list(range(len(q)))).difference(discarded)))
-    minimized.q = set([q[i] for i in qMinIdcs])
-    for i in discarded:
-      minimized.delta.pop(q[i])
-    for qi in minimized.delta:
-      for ch in minimized.delta[qi]:
-        if q2idx[minimized.delta[qi][ch]] in discarded:
-          minimized.delta[qi][ch] = q[mergedState]
-    if q2idx[minimized.q0] in discarded:
-      minimized.q0 = q[mergedState]
-    F: Set[str] = set()
-    for f in minimized.F:
-      if q2idx[f] in discarded:
-        F.add(q[mergedState])
       else:
         F.add(f)
     minimized.F = F  # type: ignore
@@ -248,6 +216,7 @@ class NFA:
     for qi in q:
       if qi not in self.delta:
         table.add_row([qi] + [" "] * len(Sigma))  # type: ignore
+        continue
       row = [qi]
       for ch in Sigma:
         if ch not in self.delta[qi]:
@@ -326,10 +295,11 @@ if __name__ == '__main__':
 
   nfaJson = json.load(open(nfaPath))
   nfa = NFA(**nfaJson)
+  print('\n\n*** Provided NFA')
   print(nfa)
   dfa = nfa.toDFA()
+  print('\n\n*** Converted DFA')
   print(dfa)
   minimized = dfa.minimize()
-  print(minimized)
-  minimized = dfa.minimizeBak()
+  print('\n\n*** Minimized DFA')
   print(minimized)
