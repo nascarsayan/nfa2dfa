@@ -2,10 +2,9 @@ from collections import defaultdict, deque
 import json
 import os
 import sys
-from typing import Dict, List, Set, Tuple
+from typing import Dict, List, Set
 from prettytable import PrettyTable
 from copy import deepcopy
-from itertools import product
 
 LAMBDA = 'lambda'
 DELTA = 'delta'
@@ -22,42 +21,37 @@ def printTriangle(triangle: list[list[int]]):
     )
 
 
-class DFARev:
+class Node:
 
-  def __init__(
-      self, q2Name: defaultdict[int, str], q: Set[int], Sigma: Set[str],
-      delta: defaultdict[int, defaultdict[str, Set[int]]]
-    ) -> None:
-    self.q2Name = q2Name
-    self.q = q
-    self.Sigma = Sigma
-    self.delta = delta
-    # self.q0: List[int] = []
+  def __init__(self, parent: int = -1, rank: int = -1) -> None:
+    self.parent = parent
+    self.rank = rank
 
-  def getNextPairs(self, pair: Tuple[int, int], ch: str):
-    qi_next = set(filter(lambda x: x != -1, self.delta[pair[0]][ch]))
-    qj_next = set(filter(lambda x: x != -1, self.delta[pair[1]][ch]))
-    pairs = set(tuple(sorted(pi)) for pi in set(product(qi_next, qj_next)))
-    pairs = set(filter(lambda x: x[0] != x[1], pairs))
-    return pairs
 
-  def delta2table(self):
-    q = list(sorted(self.q))
-    Sigma = list(sorted(self.Sigma))
-    table = PrettyTable()
-    table.field_names = [DELTA] + Sigma
-    for qi in q:
-      if qi not in self.delta:
-        table.add_row([str(qi)] + [" "] * len(Sigma))  # type: ignore
-        continue
-      row = [str(qi)]
-      for ch in Sigma:
-        if ch not in self.delta[qi]:
-          row.append(" ")
-          continue
-        row.append(str(self.delta[qi][ch]))
-      table.add_row(row)  # type: ignore
-    return table
+class UnionFind:
+
+  def __init__(self, size: int) -> None:
+    self.islands = [Node(i, 0) for i in range(size)]
+    self.count = size
+
+  def find(self, i: int):
+    if self.islands[i].parent != i:
+      self.islands[i].parent = self.find(self.islands[i].parent)
+    return self.islands[i].parent
+
+  def union(self, i: int, j: int):
+    i_par = self.find(i)
+    j_par = self.find(j)
+    if i_par == j_par:
+      return
+    if self.islands[i_par].rank < self.islands[j_par].rank:
+      self.islands[i_par].parent = j_par
+    elif self.islands[i_par].rank > self.islands[j_par].rank:
+      self.islands[j_par].parent = i_par
+    else:
+      self.islands[j_par].parent = i_par
+      self.islands[i_par].rank += 1
+    self.count -= 1
 
 
 class DFA:
@@ -96,6 +90,21 @@ q0: {self.q0}
 F: {list(sorted((self.F)))}
 delta:\n{self._delta2table()}
 '''
+    return res
+
+  def simulate(self, inp: str | list[str]):
+    q = self.q0
+    res = f'{q}'
+    for ch in inp:
+      if ch not in self.delta[q]:
+        res += " REJECT"
+        return res
+      q = self.delta[q][ch]
+      res = f'{res} -- {ch} --> {q}'
+    if q in self.F:
+      res += " ACCEPT"
+    else:
+      res += " REJECT"
     return res
 
   def minimize(self):
@@ -151,34 +160,30 @@ delta:\n{self._delta2table()}
     print('\n\n+++ Triangle filled')
     printTriangle(triangle)
 
-    collapsed: Set[int] = set()
+    islands = UnionFind(len(qNames))
     for i in range(len(qNames)):
       for j in range(i + 1, len(qNames)):
         if triangle[j][i] == 0:
-          collapsed = collapsed.union([i, j])
+          islands.union(i, j)
 
     minimized = deepcopy(self)
-    if len(collapsed) == 0:
+    if islands.count == len(qNames):
       return minimized
 
-    mergedState = list(sorted(collapsed))[0]
-    discarded = collapsed.difference([mergedState])
-    qMinIdcs = list(sorted(set(range(len(qNames))).difference(discarded)))
-    minimized.q = set([qNames[i] for i in qMinIdcs])
-    for i in discarded:
-      minimized.delta.pop(qNames[i])
+    qMinIdcs = list(sorted(set([islands.find(i) for i in range(len(qNames))])))
+    minimized.q = set([qNames[idx] for idx in qMinIdcs])
+    for i in range(len(qNames)):
+      if i not in qMinIdcs:
+        minimized.delta.pop(qNames[i])
     for qi in minimized.delta:
       for ch in minimized.delta[qi]:
-        if name2q[minimized.delta[qi][ch]] in discarded:
-          minimized.delta[qi][ch] = qNames[mergedState]
-    if name2q[minimized.q0] in discarded:
-      minimized.q0 = qNames[mergedState]
+        minimized.delta[qi][ch] = qNames[islands.find(
+          name2q[minimized.delta[qi][ch]]
+          )]
+    minimized.q0 = qNames[islands.find(name2q[minimized.q0])]
     F: Set[str] = set()
     for f in minimized.F:
-      if name2q[f] in discarded:
-        F.add(qNames[mergedState])
-      else:
-        F.add(f)
+      F.add(qNames[islands.find(name2q[f])])
     minimized.F = F  # type: ignore
     return minimized
 
@@ -305,3 +310,8 @@ if __name__ == '__main__':
   minimized = dfa.minimize()
   print('\n\n*** Minimized DFA')
   print(minimized)
+  while True:
+    inp = input("Enter the string to simulate. Press enter to exit: ")
+    if not inp:
+      break
+    print(minimized.simulate(inp))

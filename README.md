@@ -29,17 +29,3 @@ For each problem, list
 - the input specification of the NFA-lambda, and 
 - the input and outputs of the resulting (minimized) DFA for two strings that should be accepted and two strings that should be rejected.
 For each string, print the computation (i.e., the sequence of configurations) of the DFA on the string, followed by "Accepted" or "Rejected". Submit a report including a description of your design and implementation for parts I, II and III, and the sample problems with inputs and requested outputs.
-
-
-
-### Note to the client
-
-The compensation and the time required / provided for the assignment aren't directly proportional.
-I've coded the NFA -> DFA completely myself, and it was interesting.
-I will need some more time for the other tasks.
-
-#### Todo
-II. DFA minimization [reference](https://github.com/navin-mohan/dfa-minimization/blob/master/dfa.py)
-
-III. Simulation
-Will try to complete this.
