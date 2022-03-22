@@ -1,0 +1,10 @@
+[
+  {
+    "input": "babbbb",
+    "output": "ACCEPT"
+  },
+  {
+    "input": "abba",
+    "output": "REJECT"
+  }
+]

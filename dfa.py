@@ -8,6 +8,8 @@ from copy import deepcopy
 
 LAMBDA = 'lambda'
 DELTA = 'delta'
+INPUT = 'input'
+OUTPUT = 'output'
 
 
 def err(message: str):
@@ -293,8 +295,10 @@ delta:\n{self._delta2table()}
 
 if __name__ == '__main__':
 
-  if len(sys.argv) != 2:
-    print('Usage: python dfa.py <path-to-nfa-spec>')
+  if len(sys.argv) not in [2, 3]:
+    print(
+      'Usage: python dfa.py <path-to-nfa-spec> [<path-to-input-strings-for-simulation>]'
+      )
 
   nfaPath = sys.argv[1]
   if not os.path.isfile(nfaPath):
@@ -310,8 +314,20 @@ if __name__ == '__main__':
   minimized = dfa.minimize()
   print('\n\n*** Minimized DFA')
   print(minimized)
-  while True:
-    inp = input("Enter the string to simulate. Press enter to exit: ")
-    if not inp:
-      break
-    print(minimized.simulate(inp))
+
+  if len(sys.argv) == 2:
+    while True:
+      inp = input("Enter the string to simulate. Press enter to exit: ")
+      if not inp:
+        break
+      print(minimized.simulate(inp))
+  else:
+    inpPath = sys.argv[2]
+    if not os.path.isfile(nfaPath):
+      err(f'Could not find the input file, can\'t simulate "{nfaPath}"')
+    inpList: List[Dict[str, str]] = json.load(open(inpPath))
+    for inp in inpList:
+      fsmInp = inp[INPUT]
+      print(f'Input string: {fsmInp}')
+      fsmOut = minimized.simulate(fsmInp)
+      print(fsmOut)
