@@ -1,0 +1,26 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "https://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg width="800" height="600" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <ellipse stroke="black" stroke-width="1" fill="none" cx="132.5" cy="243.5" rx="30" ry="30" />
+  <text x="122.5" y="249.5" font-family="Times New Roman" font-size="20">q0</text>
+  <ellipse stroke="black" stroke-width="1" fill="none" cx="258.5" cy="243.5" rx="30" ry="30" />
+  <text x="248.5" y="249.5" font-family="Times New Roman" font-size="20">q1</text>
+  <ellipse stroke="black" stroke-width="1" fill="none" cx="370.5" cy="243.5" rx="30" ry="30" />
+  <text x="360.5" y="249.5" font-family="Times New Roman" font-size="20">q2</text>
+  <ellipse stroke="black" stroke-width="1" fill="none" cx="494.5" cy="243.5" rx="30" ry="30" />
+  <text x="484.5" y="249.5" font-family="Times New Roman" font-size="20">q3</text>
+  <ellipse stroke="black" stroke-width="1" fill="none" cx="494.5" cy="243.5" rx="24" ry="24" />
+  <path stroke="black" stroke-width="1" fill="none" d="M 119.275,216.703 A 22.5,22.5 0 1 1 145.725,216.703" />
+  <text x="120.5" y="167.5" font-family="Times New Roman" font-size="20">a,b</text>
+  <polygon fill="black" stroke-width="1" points="145.725,216.703 154.473,213.17 146.382,207.292" />
+  <polygon stroke="black" stroke-width="1" points="162.5,243.5 228.5,243.5" />
+  <polygon fill="black" stroke-width="1" points="228.5,243.5 220.5,238.5 220.5,248.5" />
+  <text x="190.5" y="264.5" font-family="Times New Roman" font-size="20">b</text>
+  <polygon stroke="black" stroke-width="1" points="288.5,243.5 340.5,243.5" />
+  <polygon fill="black" stroke-width="1" points="340.5,243.5 332.5,238.5 332.5,248.5" />
+  <text x="302.5" y="264.5" font-family="Times New Roman" font-size="20">a,b</text>
+  <polygon stroke="black" stroke-width="1" points="400.5,243.5 464.5,243.5" />
+  <polygon fill="black" stroke-width="1" points="464.5,243.5 456.5,238.5 456.5,248.5" />
+  <text x="420.5" y="264.5" font-family="Times New Roman" font-size="20">a,b</text>
+</svg>
