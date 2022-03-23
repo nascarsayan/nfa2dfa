@@ -1,7 +1,7 @@
 // FSM
 digraph {
-	q2
 	q1
+	q2
 	node [shape=doublecircle]
 	q3
 	node [color=aquamarine shape=circle style=filled]

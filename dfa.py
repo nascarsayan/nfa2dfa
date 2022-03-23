@@ -266,6 +266,19 @@ class NFA:
     self.q0 = q0
     self.F = set(F)
     self.vizFile = vizFile
+    self.ttable: defaultdict[str, defaultdict[str,
+      Set[str]]] = defaultdict(lambda: defaultdict(lambda: set()))
+
+  def generateTTable(self):
+    for qi in self.delta:
+      lmb = self.lambdaClosure({qi})
+      for ch in self.Sigma:
+        nextStates: Set[str] = set()
+        for qj in lmb:
+          if ch in self.delta[qj]:
+            nextStates = nextStates.union(self.delta[qj][ch])
+        if len(nextStates) > 0:
+          self.ttable[qi][ch] = nextStates
 
   def _delta2table(self):
     q = list(sorted(self.q))
@@ -285,6 +298,24 @@ class NFA:
       table.add_row(row)  # type: ignore
     return table
 
+  def _tTable2table(self):
+    q = list(sorted(self.q))
+    Sigma = list(sorted(self.Sigma))
+    table = PrettyTable()
+    table.field_names = ['t'] + Sigma
+    for qi in q:
+      if qi not in self.ttable:
+        table.add_row([qi] + [" "] * len(Sigma))  # type: ignore
+        continue
+      row = [qi]
+      for ch in Sigma:
+        if ch not in self.ttable[qi]:
+          row.append(" ")
+          continue
+        row.append(str(self.ttable[qi][ch]))
+      table.add_row(row)  # type: ignore
+    return table
+
   def __repr__(self) -> str:
     res = f'''
 q: {list(sorted((self.q)))}
@@ -292,6 +323,7 @@ Sigma: {self.Sigma}
 q0: {self.q0}
 F: {list(sorted((self.F)))}
 delta:\n{self._delta2table()}
+t-table:\n{self._tTable2table()}
 '''
     return res
 
@@ -312,7 +344,9 @@ delta:\n{self._delta2table()}
     fileName = str(self.vizFile)
     saveFSM(vertices, edges, q0, F, fileName)
 
-  def transition(self, q: str, ch: str):
+  def transition(self, q: str, ch: str) -> Set[str]:
+    if q not in self.delta or ch not in self.delta[q]:
+      return set()
     return self.delta[q][ch]
 
   def serializeStateSet(self, states: Set[str]):
@@ -377,6 +411,7 @@ if __name__ == '__main__':
 
   nfaJson = json.load(open(nfaPath))
   nfa = NFA(vizFile=vizFile.joinpath('nfa.gv'), **nfaJson)
+  nfa.generateTTable()
   print('\n\n*** Provided NFA')
   print(nfa)
   nfa.vizualize()

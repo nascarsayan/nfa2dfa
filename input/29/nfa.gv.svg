@@ -9,11 +9,24 @@
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 327.99)">
 <title>%3</title>
 <polygon fill="white" stroke="transparent" points="-4,4 -4,-327.99 98.75,-327.99 98.75,4 -4,4"/>
-<!-- q2 -->
+<!-- q1 -->
 <g id="node1" class="node">
+<title>q1</title>
+<ellipse fill="none" stroke="black" cx="27" cy="-209.5" rx="27" ry="18"/>
+<text text-anchor="middle" x="27" y="-205.8" font-family="Times,serif" font-size="14.00">q1</text>
+</g>
+<!-- q2 -->
+<g id="node2" class="node">
 <title>q2</title>
 <ellipse fill="none" stroke="black" cx="27" cy="-122.5" rx="27" ry="18"/>
 <text text-anchor="middle" x="27" y="-118.8" font-family="Times,serif" font-size="14.00">q2</text>
+</g>
+<!-- q1&#45;&gt;q2 -->
+<g id="edge3" class="edge">
+<title>q1&#45;&gt;q2</title>
+<path fill="none" stroke="black" d="M27,-191.29C27,-179.66 27,-164.04 27,-150.73"/>
+<polygon fill="black" stroke="black" points="30.5,-150.67 27,-140.67 23.5,-150.67 30.5,-150.67"/>
+<text text-anchor="middle" x="40.5" y="-162.3" font-family="Times,serif" font-size="14.00">a, b</text>
 </g>
 <!-- q3 -->
 <g id="node3" class="node">
@@ -28,19 +41,6 @@
 <path fill="none" stroke="black" d="M27,-104.3C27,-93.01 27,-77.82 27,-63.95"/>
 <polygon fill="black" stroke="black" points="30.5,-63.68 27,-53.68 23.5,-63.68 30.5,-63.68"/>
 <text text-anchor="middle" x="40.5" y="-75.3" font-family="Times,serif" font-size="14.00">a, b</text>
-</g>
-<!-- q1 -->
-<g id="node2" class="node">
-<title>q1</title>
-<ellipse fill="none" stroke="black" cx="27" cy="-209.5" rx="27" ry="18"/>
-<text text-anchor="middle" x="27" y="-205.8" font-family="Times,serif" font-size="14.00">q1</text>
-</g>
-<!-- q1&#45;&gt;q2 -->
-<g id="edge3" class="edge">
-<title>q1&#45;&gt;q2</title>
-<path fill="none" stroke="black" d="M27,-191.29C27,-179.66 27,-164.04 27,-150.73"/>
-<polygon fill="black" stroke="black" points="30.5,-150.67 27,-140.67 23.5,-150.67 30.5,-150.67"/>
-<text text-anchor="middle" x="40.5" y="-162.3" font-family="Times,serif" font-size="14.00">a, b</text>
 </g>
 <!-- q0 -->
 <g id="node4" class="node">

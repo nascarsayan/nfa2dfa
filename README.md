@@ -10,6 +10,13 @@ pip install -r requirements.txt
 python3 dfa.py input/54a/definition.json input/54a/strings.json
 ```
 
+```
+25c: (abc)*a*
+25d: (ba+bb)*+(aa+ab)*
+28: (ab+ba)* + (ab+ba)*((aa(a+b)*bb) + (bb(a+b)*aa))(a+b)*
+29: (a + b)* b (a + b) ( a + b )
+```
+
 ### Problem statement
 Assignment 3: DFA conversion algorithms (due by email and hard copy 03/23/22) 
 

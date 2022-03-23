@@ -3,9 +3,9 @@ digraph {
 	"[]"
 	"['q2']"
 	node [shape=doublecircle]
-	"['q4']"
-	"['q3']"
 	"['q1', 'q4']"
+	"['q3']"
+	"['q4']"
 	node [color=aquamarine shape=doublecircle style=filled]
 	"['q0', 'q3']"
 	node [shape=circle]

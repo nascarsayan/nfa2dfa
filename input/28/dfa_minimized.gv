@@ -1,13 +1,13 @@
 // FSM
 digraph {
-	"['q2', 'q3']"
 	"['q6', 'q7']"
-	"['q6']"
 	"['q2']"
+	"['q2', 'q3']"
+	"['q6']"
 	node [shape=doublecircle]
+	"['q2', 'q3', 'q4']"
 	"['q1']"
 	"['q5']"
-	"['q2', 'q3', 'q4']"
 	node [color=aquamarine shape=doublecircle style=filled]
 	"['q0']"
 	node [shape=circle]
