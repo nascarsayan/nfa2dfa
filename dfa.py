@@ -52,7 +52,7 @@ def err(message: str):
   raise Exception(message)
 
 
-def printTriangle(triangle: list[list[int]]):
+def printTriangle(triangle: List[List[int]]):
   print(
     '\n'.join([' '.join([str(tij) for tij in ti])
     for ti in triangle]) + '\n-------'
@@ -148,7 +148,7 @@ delta:\n{self._delta2table()}
     fileName = str(self.vizFile)
     saveFSM(vertices, edges, q0, F, fileName)
 
-  def simulate(self, inp: str | list[str]):
+  def simulate(self, inp: str | List[str]):
     q = self.q0
     res = f'{q}'
     for ch in inp:
