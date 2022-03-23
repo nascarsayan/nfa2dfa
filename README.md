@@ -1,8 +1,13 @@
 ### Usage
 
 ```sh
+# Install graphviz. ref: https://graphviz.org/download/
+# Linux
+sudo apt install graphviz
+# Mac
+brew install graphviz
 pip install -r requirements.txt
-python3 dfa.py input/54a.txt
+python3 dfa.py input/54a/definition.json input/54a/strings.json
 ```
 
 ### Problem statement

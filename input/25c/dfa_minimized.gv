@@ -1,0 +1,21 @@
+// FSM
+digraph {
+	"[]"
+	"['q2']"
+	node [shape=doublecircle]
+	"['q4']"
+	"['q1', 'q4']"
+	node [color=aquamarine shape=doublecircle style=filled]
+	"['q0', 'q3']"
+	node [shape=circle]
+	"['q0', 'q3']" -> "['q1', 'q4']" [label=a]
+	"['q0', 'q3']" -> "[]" [label="b, c"]
+	"['q1', 'q4']" -> "['q4']" [label=a]
+	"['q1', 'q4']" -> "['q2']" [label=b]
+	"['q1', 'q4']" -> "[]" [label=c]
+	"[]" -> "[]" [label="a, b, c"]
+	"['q4']" -> "['q4']" [label=a]
+	"['q4']" -> "[]" [label="b, c"]
+	"['q2']" -> "[]" [label="a, b"]
+	"['q2']" -> "['q0', 'q3']" [label=c]
+}

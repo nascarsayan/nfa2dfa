@@ -1,8 +1,9 @@
 from collections import defaultdict, deque
 import json
 import os
+from pathlib import Path
 import sys
-from typing import Dict, List, Set
+from typing import Dict, List, Set, Tuple
 from prettytable import PrettyTable
 from copy import deepcopy
 
@@ -10,6 +11,41 @@ LAMBDA = 'lambda'
 DELTA = 'delta'
 INPUT = 'input'
 OUTPUT = 'output'
+
+import graphviz  # type: ignore
+
+states = ['hungry', 'satisfied', 'full', 'sick']
+q0 = 'full'
+F = ['full', 'hungry']
+
+
+def saveFSM(
+    vertices: Set[str], edges: List[Tuple[str, str, str]], q0: str,
+    F: Set[str], fileName: str
+  ):
+  dot = graphviz.Digraph(comment='FSM', filename=fileName)
+
+  q_attr = {'shape': 'circle'}
+  for v in vertices:
+    if v != q0 and v not in F:
+      dot.node(v)  # type: ignore
+
+  F_attr = {'shape': 'doublecircle'}
+  dot.attr('node', **F_attr)  # type: ignore
+  for f in F:
+    if f != q0:
+      dot.node(f)  # type: ignore
+
+  q0_attr = {'shape': 'circle', 'color': 'aquamarine', 'style': 'filled'}
+  if q0 in F:
+    q0_attr['shape'] = 'doublecircle'
+  dot.attr('node', **q0_attr)  # type: ignore
+  dot.node(q0)  # type: ignore
+
+  dot.attr('node', **q_attr)  # type: ignore
+  for (u, v, label) in edges:
+    dot.edge(u, v, label)  # type: ignore
+  dot.render(format='svg').replace('\\', '/')  # type: ignore
 
 
 def err(message: str):
@@ -58,13 +94,14 @@ class UnionFind:
 
 class DFA:
 
-  def __init__(self, Sigma: Set[str]) -> None:
+  def __init__(self, Sigma: Set[str], vizFile: Path) -> None:
     self.q: Set[str] = set()
     self.Sigma = Sigma
     self.delta: defaultdict[str, defaultdict[str,
       str]] = defaultdict(lambda: defaultdict(str))
     self.q0: str
     self.F: Set[str] = set()
+    self.vizFile = vizFile
 
   def _delta2table(self):
     q = list(sorted(self.q))
@@ -93,6 +130,23 @@ F: {list(sorted((self.F)))}
 delta:\n{self._delta2table()}
 '''
     return res
+
+  def vizualize(self):
+    vertices = self.q
+    edges: List[Tuple[str, str, str]] = []
+    q0 = self.q0
+    F = self.F
+    qi2qj: defaultdict[str, defaultdict[str,
+      Set[str]]] = defaultdict(lambda: defaultdict(lambda: set()))
+    for qi in self.delta:
+      for ch in self.delta[qi]:
+        qj = self.delta[qi][ch]
+        qi2qj[qi][qj].add(ch)
+    for qi in qi2qj:
+      for qj in qi2qj[qi]:
+        edges.append((qi, qj, ', '.join(list(sorted(qi2qj[qi][qj])))))
+    fileName = str(self.vizFile)
+    saveFSM(vertices, edges, q0, F, fileName)
 
   def simulate(self, inp: str | list[str]):
     q = self.q0
@@ -169,6 +223,7 @@ delta:\n{self._delta2table()}
           islands.union(i, j)
 
     minimized = deepcopy(self)
+    minimized.vizFile = self.vizFile.parent.joinpath('dfa_minimized.gv')
     if islands.count == len(qNames):
       return minimized
 
@@ -197,12 +252,8 @@ def serializeStateSet(states: Set[str]):
 class NFA:
 
   def __init__(
-    self,
-    q: List[str],
-    Sigma: List[str],
-    delta: Dict[str, Dict[str, List[str]]],
-    q0: str,
-    F: List[str],
+      self, q: List[str], Sigma: List[str], delta: Dict[str, Dict[str,
+    List[str]]], q0: str, F: List[str], vizFile: Path
     ) -> None:
     self.q = set(q)
     self.Sigma = set(Sigma)
@@ -214,6 +265,7 @@ class NFA:
         self.delta[qi][ch] = set(delta[qi][ch])
     self.q0 = q0
     self.F = set(F)
+    self.vizFile = vizFile
 
   def _delta2table(self):
     q = list(sorted(self.q))
@@ -243,6 +295,23 @@ delta:\n{self._delta2table()}
 '''
     return res
 
+  def vizualize(self):
+    vertices = self.q
+    edges: List[Tuple[str, str, str]] = []
+    q0 = self.q0
+    F = self.F
+    qi2qj: defaultdict[str, defaultdict[str,
+      Set[str]]] = defaultdict(lambda: defaultdict(lambda: set()))
+    for qi in self.delta:
+      for ch in self.delta[qi]:
+        for qj in self.delta[qi][ch]:
+          qi2qj[qi][qj].add(ch)
+    for qi in qi2qj:
+      for qj in qi2qj[qi]:
+        edges.append((qi, qj, ', '.join(list(sorted(qi2qj[qi][qj])))))
+    fileName = str(self.vizFile)
+    saveFSM(vertices, edges, q0, F, fileName)
+
   def transition(self, q: str, ch: str):
     return self.delta[q][ch]
 
@@ -263,7 +332,7 @@ delta:\n{self._delta2table()}
     return len(self.F.intersection(states)) > 0
 
   def toDFA(self):
-    dfa = DFA(self.Sigma)
+    dfa = DFA(self.Sigma, self.vizFile.parent.joinpath('dfa_converted.gv'))
 
     # Determining the set of possible initial states
     seed = self.lambdaClosure({self.q0})
@@ -304,16 +373,21 @@ if __name__ == '__main__':
   if not os.path.isfile(nfaPath):
     err(f'Could not find the file "{nfaPath}"')
 
+  vizFile = Path(nfaPath).parent.absolute()
+
   nfaJson = json.load(open(nfaPath))
-  nfa = NFA(**nfaJson)
+  nfa = NFA(vizFile=vizFile.joinpath('nfa.gv'), **nfaJson)
   print('\n\n*** Provided NFA')
   print(nfa)
+  nfa.vizualize()
   dfa = nfa.toDFA()
   print('\n\n*** Converted DFA')
   print(dfa)
+  dfa.vizualize()
   minimized = dfa.minimize()
   print('\n\n*** Minimized DFA')
   print(minimized)
+  minimized.vizualize()
 
   if len(sys.argv) == 2:
     while True:

@@ -1,0 +1,14 @@
+// FSM
+digraph {
+	q2
+	q1
+	node [shape=doublecircle]
+	q3
+	node [color=aquamarine shape=circle style=filled]
+	q0
+	node [shape=circle]
+	q0 -> q0 [label="a, b"]
+	q0 -> q1 [label=b]
+	q1 -> q2 [label="a, b"]
+	q2 -> q3 [label="a, b"]
+}
