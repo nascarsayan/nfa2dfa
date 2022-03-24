@@ -1,15 +1,15 @@
 // FSM
 digraph {
-	q3
 	q1
+	q3
 	node [shape=doublecircle]
-	q4
 	q2
+	q4
 	node [color=aquamarine shape=circle style=filled]
 	q0
 	node [shape=circle]
-	q0 -> q4 [label=lambda]
 	q0 -> q2 [label=lambda]
+	q0 -> q4 [label=lambda]
 	q1 -> q2 [label="a, b"]
 	q2 -> q1 [label=b]
 	q3 -> q4 [label="a, b"]

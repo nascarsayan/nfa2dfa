@@ -3,7 +3,7 @@ import json
 import os
 from pathlib import Path
 import sys
-from typing import Dict, List, Set, Tuple
+from typing import Dict, List, Set, Tuple, Union
 from prettytable import PrettyTable
 from copy import deepcopy
 
@@ -148,7 +148,7 @@ delta:\n{self._delta2table()}
     fileName = str(self.vizFile)
     saveFSM(vertices, edges, q0, F, fileName)
 
-  def simulate(self, inp: str | List[str]):
+  def simulate(self, inp: Union[str, List[str]]):
     q = self.q0
     res = f'{q}'
     for ch in inp:

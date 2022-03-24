@@ -1,8 +1,8 @@
 // FSM
 digraph {
-	"['q3']"
 	"[]"
 	"['q1']"
+	"['q3']"
 	node [shape=doublecircle]
 	"['q2']"
 	"['q4']"

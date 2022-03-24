@@ -9,28 +9,8 @@
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 472.48)">
 <title>%3</title>
 <polygon fill="white" stroke="transparent" points="-4,4 -4,-472.48 265.74,-472.48 265.74,4 -4,4"/>
-<!-- [&#39;q3&#39;] -->
-<g id="node1" class="node">
-<title>[&#39;q3&#39;]</title>
-<ellipse fill="none" stroke="black" cx="178.45" cy="-232.89" rx="34.39" ry="18"/>
-<text text-anchor="middle" x="178.45" y="-229.19" font-family="Times,serif" font-size="14.00">[&#39;q3&#39;]</text>
-</g>
-<!-- [&#39;q4&#39;] -->
-<g id="node5" class="node">
-<title>[&#39;q4&#39;]</title>
-<ellipse fill="none" stroke="black" cx="146.45" cy="-125.45" rx="34.4" ry="34.4"/>
-<ellipse fill="none" stroke="black" cx="146.45" cy="-125.45" rx="38.39" ry="38.39"/>
-<text text-anchor="middle" x="146.45" y="-121.75" font-family="Times,serif" font-size="14.00">[&#39;q4&#39;]</text>
-</g>
-<!-- [&#39;q3&#39;]&#45;&gt;[&#39;q4&#39;] -->
-<g id="edge3" class="edge">
-<title>[&#39;q3&#39;]&#45;&gt;[&#39;q4&#39;]</title>
-<path fill="none" stroke="black" d="M173.31,-214.95C169.8,-203.39 164.97,-187.49 160.38,-172.36"/>
-<polygon fill="black" stroke="black" points="163.66,-171.12 157.41,-162.57 156.96,-173.16 163.66,-171.12"/>
-<text text-anchor="middle" x="180.95" y="-185.69" font-family="Times,serif" font-size="14.00">a, b</text>
-</g>
 <!-- [] -->
-<g id="node2" class="node">
+<g id="node1" class="node">
 <title>[]</title>
 <ellipse fill="none" stroke="black" cx="43.45" cy="-18" rx="27" ry="18"/>
 <text text-anchor="middle" x="43.45" y="-14.3" font-family="Times,serif" font-size="14.00">[]</text>
@@ -43,7 +23,7 @@
 <text text-anchor="middle" x="101.95" y="-14.3" font-family="Times,serif" font-size="14.00">a, b</text>
 </g>
 <!-- [&#39;q1&#39;] -->
-<g id="node3" class="node">
+<g id="node2" class="node">
 <title>[&#39;q1&#39;]</title>
 <ellipse fill="none" stroke="black" cx="91.45" cy="-232.89" rx="34.39" ry="18"/>
 <text text-anchor="middle" x="91.45" y="-229.19" font-family="Times,serif" font-size="14.00">[&#39;q1&#39;]</text>
@@ -62,6 +42,26 @@
 <polygon fill="black" stroke="black" points="51.03,-337.97 51.01,-348.57 57.63,-340.3 51.03,-337.97"/>
 <text text-anchor="middle" x="92.95" y="-272.69" font-family="Times,serif" font-size="14.00">a, b</text>
 </g>
+<!-- [&#39;q3&#39;] -->
+<g id="node3" class="node">
+<title>[&#39;q3&#39;]</title>
+<ellipse fill="none" stroke="black" cx="178.45" cy="-232.89" rx="34.39" ry="18"/>
+<text text-anchor="middle" x="178.45" y="-229.19" font-family="Times,serif" font-size="14.00">[&#39;q3&#39;]</text>
+</g>
+<!-- [&#39;q4&#39;] -->
+<g id="node5" class="node">
+<title>[&#39;q4&#39;]</title>
+<ellipse fill="none" stroke="black" cx="146.45" cy="-125.45" rx="34.4" ry="34.4"/>
+<ellipse fill="none" stroke="black" cx="146.45" cy="-125.45" rx="38.39" ry="38.39"/>
+<text text-anchor="middle" x="146.45" y="-121.75" font-family="Times,serif" font-size="14.00">[&#39;q4&#39;]</text>
+</g>
+<!-- [&#39;q3&#39;]&#45;&gt;[&#39;q4&#39;] -->
+<g id="edge3" class="edge">
+<title>[&#39;q3&#39;]&#45;&gt;[&#39;q4&#39;]</title>
+<path fill="none" stroke="black" d="M173.31,-214.95C169.8,-203.39 164.97,-187.49 160.38,-172.36"/>
+<polygon fill="black" stroke="black" points="163.66,-171.12 157.41,-162.57 156.96,-173.16 163.66,-171.12"/>
+<text text-anchor="middle" x="179.95" y="-185.69" font-family="Times,serif" font-size="14.00">a, b</text>
+</g>
 <!-- [&#39;q2&#39;]&#45;&gt;[] -->
 <g id="edge7" class="edge">
 <title>[&#39;q2&#39;]&#45;&gt;[]</title>
@@ -76,19 +76,19 @@
 <polygon fill="black" stroke="black" points="71.07,-258.8 74.93,-248.93 65.76,-254.24 71.07,-258.8"/>
 <text text-anchor="middle" x="65.45" y="-272.69" font-family="Times,serif" font-size="14.00">b</text>
 </g>
-<!-- [&#39;q4&#39;]&#45;&gt;[&#39;q3&#39;] -->
-<g id="edge5" class="edge">
-<title>[&#39;q4&#39;]&#45;&gt;[&#39;q3&#39;]</title>
-<path fill="none" stroke="black" d="M144.34,-163.91C144.84,-174.83 146.5,-186.6 150.45,-196.89 151.98,-200.9 154.15,-204.8 156.62,-208.46"/>
-<polygon fill="black" stroke="black" points="153.89,-210.66 162.73,-216.49 159.46,-206.42 153.89,-210.66"/>
-<text text-anchor="middle" x="154.95" y="-185.69" font-family="Times,serif" font-size="14.00">a</text>
-</g>
 <!-- [&#39;q4&#39;]&#45;&gt;[] -->
 <g id="edge6" class="edge">
 <title>[&#39;q4&#39;]&#45;&gt;[]</title>
 <path fill="none" stroke="black" d="M119.92,-97.29C102.81,-79.78 80.85,-57.29 64.86,-40.92"/>
 <polygon fill="black" stroke="black" points="67.02,-38.13 57.53,-33.42 62.01,-43.02 67.02,-38.13"/>
 <text text-anchor="middle" x="97.45" y="-57.8" font-family="Times,serif" font-size="14.00">b</text>
+</g>
+<!-- [&#39;q4&#39;]&#45;&gt;[&#39;q3&#39;] -->
+<g id="edge5" class="edge">
+<title>[&#39;q4&#39;]&#45;&gt;[&#39;q3&#39;]</title>
+<path fill="none" stroke="black" d="M143.61,-163.92C143.95,-174.85 145.49,-186.61 149.45,-196.89 151.08,-201.15 153.46,-205.27 156.16,-209.1"/>
+<polygon fill="black" stroke="black" points="153.45,-211.31 162.42,-216.95 158.92,-206.95 153.45,-211.31"/>
+<text text-anchor="middle" x="153.95" y="-185.69" font-family="Times,serif" font-size="14.00">a</text>
 </g>
 <!-- [&#39;q0&#39;, &#39;q2&#39;, &#39;q4&#39;] -->
 <g id="node6" class="node">
@@ -97,19 +97,19 @@
 <ellipse fill="none" stroke="aquamarine" cx="178.45" cy="-385.19" rx="83.09" ry="83.09"/>
 <text text-anchor="middle" x="178.45" y="-381.49" font-family="Times,serif" font-size="14.00">[&#39;q0&#39;, &#39;q2&#39;, &#39;q4&#39;]</text>
 </g>
+<!-- [&#39;q0&#39;, &#39;q2&#39;, &#39;q4&#39;]&#45;&gt;[&#39;q1&#39;] -->
+<g id="edge2" class="edge">
+<title>[&#39;q0&#39;, &#39;q2&#39;, &#39;q4&#39;]&#45;&gt;[&#39;q1&#39;]</title>
+<path fill="none" stroke="black" d="M136.99,-312.56C125.93,-293.46 114.69,-274.05 106.15,-259.3"/>
+<polygon fill="black" stroke="black" points="108.99,-257.22 100.95,-250.32 102.94,-260.73 108.99,-257.22"/>
+<text text-anchor="middle" x="124.45" y="-272.69" font-family="Times,serif" font-size="14.00">b</text>
+</g>
 <!-- [&#39;q0&#39;, &#39;q2&#39;, &#39;q4&#39;]&#45;&gt;[&#39;q3&#39;] -->
 <g id="edge1" class="edge">
 <title>[&#39;q0&#39;, &#39;q2&#39;, &#39;q4&#39;]&#45;&gt;[&#39;q3&#39;]</title>
 <path fill="none" stroke="black" d="M178.45,-301.57C178.45,-286.99 178.45,-272.79 178.45,-261.2"/>
 <polygon fill="black" stroke="black" points="181.95,-260.95 178.45,-250.95 174.95,-260.95 181.95,-260.95"/>
 <text text-anchor="middle" x="182.95" y="-272.69" font-family="Times,serif" font-size="14.00">a</text>
-</g>
-<!-- [&#39;q0&#39;, &#39;q2&#39;, &#39;q4&#39;]&#45;&gt;[&#39;q1&#39;] -->
-<g id="edge2" class="edge">
-<title>[&#39;q0&#39;, &#39;q2&#39;, &#39;q4&#39;]&#45;&gt;[&#39;q1&#39;]</title>
-<path fill="none" stroke="black" d="M136.99,-312.56C125.93,-293.46 114.69,-274.05 106.15,-259.3"/>
-<polygon fill="black" stroke="black" points="108.99,-257.22 100.95,-250.32 102.94,-260.73 108.99,-257.22"/>
-<text text-anchor="middle" x="125.45" y="-272.69" font-family="Times,serif" font-size="14.00">b</text>
 </g>
 </g>
 </svg>
