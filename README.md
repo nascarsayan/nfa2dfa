@@ -6,15 +6,9 @@
 sudo apt install graphviz
 # Mac
 brew install graphviz
-pip install -r requirements.txt
-python3 dfa.py input/54a/definition.json input/54a/strings.json
-```
 
-```
-25c: (abc)*a*
-25d: (ba+bb)*+(aa+ab)*
-28: (ab+ba)* + (ab+ba)*((aa(a+b)*bb) + (bb(a+b)*aa))(a+b)*
-29: (a + b)* b (a + b) ( a + b )
+pip install -r requirements.txt
+python3 run.py input/54a/definition.json input/54a/strings.json
 ```
 
 ### Problem statement
